@@ -407,3 +407,153 @@ int main()
     cout << "Number of distinct elements: " << s.size() << endl;
     return 0;
 }
+
+// Additional 1
+
+#include <iostream>
+
+void findSaddlePoint(int **matrix, int rows, int cols)
+{
+    for (int i = 0; i < rows; ++i)
+    {
+        int row_min = matrix[i][0];
+        int min_col_index = 0;
+        for (int j = 1; j < cols; ++j)
+        {
+            if (matrix[i][j] < row_min)
+            {
+                row_min = matrix[i][j];
+                min_col_index = j;
+            }
+        }
+
+        bool is_saddle = true;
+        for (int k = 0; k < rows; ++k)
+        {
+            if (matrix[k][min_col_index] > row_min)
+            {
+                is_saddle = false;
+                break;
+            }
+        }
+
+        if (is_saddle)
+        {
+            std::cout << "Saddle Point found at (" << i << ", " << min_col_index << ") with value " << row_min << std::endl;
+            return;
+        }
+    }
+    std::cout << "No saddle point found." << std::endl;
+}
+
+// additional 2
+
+#include <iostream>
+
+int *spiralOrder(int **A, int rows, int cols, int &result_size)
+{
+    result_size = rows * cols;
+    if (result_size == 0)
+    {
+        return nullptr;
+    }
+
+    int *result = new int[result_size];
+    int top = 0;
+    int bottom = rows - 1;
+    int left = 0;
+    int right = cols - 1;
+    int index = 0;
+
+    while (top <= bottom && left <= right)
+    {
+        for (int i = left; i <= right; ++i)
+        {
+            result[index++] = A[top][i];
+        }
+        top++;
+
+        for (int i = top; i <= bottom; ++i)
+        {
+            result[index++] = A[i][right];
+        }
+        right--;
+
+        if (top <= bottom)
+        {
+            for (int i = right; i >= left; --i)
+            {
+                result[index++] = A[bottom][i];
+            }
+            bottom--;
+        }
+
+        if (left <= right)
+        {
+            for (int i = bottom; i >= top; --i)
+            {
+                result[index++] = A[i][left];
+            }
+            left++;
+        }
+    }
+    return result;
+}
+
+// additional 3
+
+#include <iostream>
+
+int **generateMatrix(int A)
+{
+    if (A <= 0)
+    {
+        return nullptr;
+    }
+
+    int **matrix = new int *[A];
+    for (int i = 0; i < A; ++i)
+    {
+        matrix[i] = new int[A];
+    }
+
+    int top = 0;
+    int bottom = A - 1;
+    int left = 0;
+    int right = A - 1;
+    int current_num = 1;
+
+    while (top <= bottom && left <= right)
+    {
+        for (int i = left; i <= right; ++i)
+        {
+            matrix[top][i] = current_num++;
+        }
+        top++;
+
+        for (int i = top; i <= bottom; ++i)
+        {
+            matrix[i][right] = current_num++;
+        }
+        right--;
+
+        if (top <= bottom)
+        {
+            for (int i = right; i >= left; --i)
+            {
+                matrix[bottom][i] = current_num++;
+            }
+            bottom--;
+        }
+
+        if (left <= right)
+        {
+            for (int i = bottom; i >= top; --i)
+            {
+                matrix[i][left] = current_num++;
+            }
+            left++;
+        }
+    }
+    return matrix;
+}

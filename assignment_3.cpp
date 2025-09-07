@@ -254,3 +254,172 @@ int main()
         cout << st[top] << "\n";
     return 0;
 }
+
+// Additional 1
+
+#include <iostream>
+#include <vector>
+#include <stack>
+
+std::vector<int> nearestSmallerElement(const std::vector<int> &A)
+{
+    std::vector<int> result(A.size());
+    std::stack<int> s;
+
+    for (int i = 0; i < A.size(); ++i)
+    {
+        while (!s.empty() && s.top() >= A[i])
+        {
+            s.pop();
+        }
+        if (s.empty())
+        {
+            result[i] = -1;
+        }
+        else
+        {
+            result[i] = s.top();
+        }
+        s.push(A[i]);
+    }
+    return result;
+}
+
+// Additional 2
+
+#include <iostream>
+#include <stack>
+
+class MinStack
+{
+private:
+    std::stack<int> s;
+    std::stack<int> minStack;
+
+public:
+    void push(int val)
+    {
+        s.push(val);
+        if (minStack.empty() || val <= minStack.top())
+        {
+            minStack.push(val);
+        }
+    }
+
+    void pop()
+    {
+        if (!s.empty())
+        {
+            if (s.top() == minStack.top())
+            {
+                minStack.pop();
+            }
+            s.pop();
+        }
+    }
+
+    int top()
+    {
+        return s.top();
+    }
+
+    int getMin()
+    {
+        return minStack.top();
+    }
+};
+
+// Additional 3
+
+#include <iostream>
+#include <vector>
+#include <stack>
+
+std::vector<int> nextGreaterElement(const std::vector<int> &arr)
+{
+    int n = arr.size();
+    std::vector<int> res(n, -1);
+    std::stack<int> s;
+
+    for (int i = n - 1; i >= 0; --i)
+    {
+        while (!s.empty() && s.top() <= arr[i])
+        {
+            s.pop();
+        }
+        if (!s.empty())
+        {
+            res[i] = s.top();
+        }
+        s.push(arr[i]);
+    }
+    return res;
+}
+
+// Additional 4
+
+#include <iostream>
+#include <vector>
+#include <stack>
+
+std::vector<int> dailyTemperatures(const std::vector<int> &temperatures)
+{
+    int n = temperatures.size();
+    std::vector<int> answer(n, 0);
+    std::stack<int> s;
+
+    for (int i = 0; i < n; ++i)
+    {
+        while (!s.empty() && temperatures[i] > temperatures[s.top()])
+        {
+            int prevIndex = s.top();
+            s.pop();
+            answer[prevIndex] = i - prevIndex;
+        }
+        s.push(i);
+    }
+    return answer;
+}
+
+// Additional 5
+
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <queue>
+
+bool canSort(std::vector<int> &A)
+{
+    std::queue<int> inputQueue;
+    for (int val : A)
+    {
+        inputQueue.push(val);
+    }
+
+    std::stack<int> s;
+    int expected = 1;
+
+    while (!inputQueue.empty() || !s.empty())
+    {
+        if (!inputQueue.empty() && inputQueue.front() == expected)
+        {
+            inputQueue.pop();
+            expected++;
+        }
+        else if (!s.empty() && s.top() == expected)
+        {
+            s.pop();
+            expected++;
+        }
+        else if (!inputQueue.empty())
+        {
+            s.push(inputQueue.front());
+            inputQueue.pop();
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return true;
+}
